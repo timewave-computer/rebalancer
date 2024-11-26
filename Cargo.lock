@@ -153,7 +153,7 @@ dependencies = [
 
 [[package]]
 name = "auction"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "auction-package",
@@ -170,7 +170,7 @@ dependencies = [
 
 [[package]]
 name = "auction-package"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -182,7 +182,7 @@ dependencies = [
 
 [[package]]
 name = "auctions-manager"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "auction",
@@ -484,7 +484,7 @@ dependencies = [
 
 [[package]]
 name = "cw-pid"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "cosmwasm-std",
  "serde",
@@ -983,7 +983,7 @@ dependencies = [
 
 [[package]]
 name = "price-oracle"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "astroport 2.9.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1087,7 +1087,7 @@ dependencies = [
 
 [[package]]
 name = "rebalancer"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "auction",
@@ -1239,7 +1239,7 @@ dependencies = [
 
 [[package]]
 name = "services-manager"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "cosmwasm-schema",
@@ -1415,7 +1415,7 @@ checksum = "adb9e6ca4f869e1180728b7950e35922a7fc6397f7b641499e8f3ef06e50dc83"
 
 [[package]]
 name = "valence-account"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "cosmwasm-schema",
@@ -1431,7 +1431,7 @@ dependencies = [
 
 [[package]]
 name = "valence-macros"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -1442,7 +1442,7 @@ dependencies = [
 
 [[package]]
 name = "valence-package"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "auction-package",
  "cosmwasm-schema",
@@ -1456,7 +1456,7 @@ dependencies = [
 
 [[package]]
 name = "valence-tests"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "astroport 2.9.5 (git+https://github.com/astroport-fi/astroport-core.git?tag=v2.9.5)",
