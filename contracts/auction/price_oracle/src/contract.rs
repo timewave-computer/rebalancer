@@ -16,10 +16,12 @@ use valence_package::event_indexing::{ValenceEvent, ValenceGenericEvent};
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
-use crate::state::{Config, PriceStep, ASTRO_PRICE_PATHS, CONFIG};
+use crate::state::{Config, PriceStep, ASTRO_PRICE_PATHS, CONFIG, LOCAL_PRICES};
 
 const CONTRACT_NAME: &str = "crates.io:oracle";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+const TWAP_PRICE_MAX_LEN: usize = 10;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
@@ -58,6 +60,7 @@ pub fn execute(
 
             let config = CONFIG.load(deps.storage)?;
 
+            // We get the prices from the auction
             let auction_addr = PAIRS
                 .query(
                     &deps.querier,
@@ -65,13 +68,14 @@ pub fn execute(
                     pair.clone(),
                 )?
                 .ok_or(ContractError::PairAuctionNotFound)?;
-            let twap_prices = TWAP_PRICES.query(&deps.querier, auction_addr)?;
+            let auction_twap_prices = TWAP_PRICES.query(&deps.querier, auction_addr)?;
 
             let source;
 
-            let price = if can_update_price_from_auction(&config, &env, &twap_prices) {
+            // We get last price either form auction or astroport
+            let last_price = if can_update_price_from_auction(&config, &env, &auction_twap_prices) {
                 source = "auction";
-                get_avg_price(twap_prices)
+                auction_twap_prices[0].clone()
             } else {
                 let steps = ASTRO_PRICE_PATHS
                     .load(deps.storage, pair.clone())
@@ -80,12 +84,31 @@ pub fn execute(
                 get_price_from_astroport(deps.as_ref(), &env, steps)?
             };
 
+            // Update the oracle local prices and add last price
+            let mut local_prices = match LOCAL_PRICES.load(deps.storage, pair.clone()) {
+                Ok(prices) => prices,
+                Err(_) => VecDeque::new(),
+            };
+
+            // if we have the max amount of prices already, remove the last one first
+            if local_prices.len() >= TWAP_PRICE_MAX_LEN {
+                local_prices.pop_back();
+            }
+
+            // Push the last price into the vector
+            local_prices.push_front(last_price.clone());
+
+            // Save the new list of prices
+            LOCAL_PRICES.save(deps.storage, pair.clone(), &local_prices)?;
+
+            // Calculate the average price
+            let avg_price = get_avg_price(local_prices);
             // Save price
-            PRICES.save(deps.storage, pair.clone(), &price)?;
+            PRICES.save(deps.storage, pair.clone(), &avg_price)?;
 
             let event = ValenceEvent::OracleUpdatePrice {
                 pair: pair.clone(),
-                price: price.price,
+                price: avg_price.price,
                 source: source.to_string(),
             };
 

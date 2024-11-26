@@ -1,7 +1,8 @@
 use auction_package::Pair;
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{
-    coins, Addr, Api, BankMsg, CosmosMsg, Decimal, Env, MessageInfo, SignedDecimal, SubMsg, Timestamp, Uint128
+    coins, Addr, Api, BankMsg, CosmosMsg, Decimal, Env, MessageInfo, SignedDecimal, SubMsg,
+    Timestamp, Uint128,
 };
 use cw_utils::{must_pay, Expiration};
 use std::borrow::Borrow;
@@ -535,10 +536,8 @@ mod test {
             #[serde(default)]
             pub account_type: RebalancerAccountType,
         }
-        
-        let one = Data1 {
-            trustee: None,
-        };
+
+        let one = Data1 { trustee: None };
 
         let parse = to_json_binary(&one).unwrap();
         let two = from_json::<Data2>(&parse).unwrap();

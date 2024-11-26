@@ -1,5 +1,5 @@
 use cosmwasm_std::SignedDecimal;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::JsValue;
 
 #[derive(Serialize, Deserialize)]
@@ -35,7 +35,6 @@ pub struct Input {
     last_input: SignedDecimal,
 }
 
-
 #[derive(Serialize, Deserialize)]
 pub struct Output {
     value: SignedDecimal,
@@ -57,5 +56,8 @@ pub fn pid(input_js: JsValue) -> Output {
 
     d = d * pid.d / input.dt;
 
-    Output { value: p + i - d, i }
+    Output {
+        value: p + i - d,
+        i,
+    }
 }

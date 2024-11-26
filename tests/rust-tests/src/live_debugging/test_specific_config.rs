@@ -1,3 +1,4 @@
+#![allow(clippy::all)]
 // Test a specific config of an account with the state of the system
 // This test should give us an idea of how the next rebalance would work, and give us
 // a manualy way to check what trades the rebalancer is calculating
