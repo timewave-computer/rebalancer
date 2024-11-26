@@ -55,6 +55,10 @@ The Rebalancer sends funds to be auctioned daily. If you are a market maker inte
 - [untrn, newt] - `neutron1zvw9l8c82hnvwsntpuy89p86ztfmmudd9usfmnpa2tnqws74zsxq56sczm`
 - [uusdc, newt] - `neutron1vu04szc78ae0nplwpuxjr6j592hn2d60zqtuts7w3ah6kajtxd2q2vfv59`
 
+## Audits
+
+Valence Services have been rigorously tested and audited. Find audits [here](./audits/)
+
 ## Security
 
 If you believe you've found a security-related issue with the contracts associated with this repository, please disclose responsibly by contacting the Timewave team at [security@timewave.computer](mailto:security@timewave.computer).

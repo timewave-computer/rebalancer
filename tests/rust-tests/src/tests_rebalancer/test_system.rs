@@ -436,7 +436,7 @@ fn test_update_admin_start() {
             &valence_package::services::rebalancer::RebalancerExecuteMsg::ApproveAdminChange::<
                 Empty,
                 Empty,
-            >,
+            > {},
             &[],
         )
         .unwrap_err();
@@ -464,7 +464,7 @@ fn test_update_admin_start() {
             &valence_package::services::rebalancer::RebalancerExecuteMsg::ApproveAdminChange::<
                 Empty,
                 Empty,
-            >,
+            > {},
             &[],
         )
         .unwrap();
@@ -499,7 +499,7 @@ fn test_update_admin_cancel() {
             suite.admin.clone(),
             suite.rebalancer_addr.clone(),
             &valence_package::services::rebalancer::RebalancerExecuteMsg::Admin::<Empty, Empty>(
-                valence_package::services::rebalancer::RebalancerAdminMsg::CancelAdminChange,
+                valence_package::services::rebalancer::RebalancerAdminMsg::CancelAdminChange {},
             ),
             &[],
         )
@@ -514,7 +514,7 @@ fn test_update_admin_cancel() {
             &valence_package::services::rebalancer::RebalancerExecuteMsg::ApproveAdminChange::<
                 Empty,
                 Empty,
-            >,
+            > {},
             &[],
         )
         .unwrap_err();
@@ -550,7 +550,7 @@ fn test_update_admin_fails() {
             &valence_package::services::rebalancer::RebalancerExecuteMsg::ApproveAdminChange::<
                 Empty,
                 Empty,
-            >,
+            > {},
             &[],
         )
         .unwrap_err();
@@ -566,7 +566,7 @@ fn test_update_admin_fails() {
             &valence_package::services::rebalancer::RebalancerExecuteMsg::ApproveAdminChange::<
                 Empty,
                 Empty,
-            >,
+            > {},
             &[],
         )
         .unwrap_err();

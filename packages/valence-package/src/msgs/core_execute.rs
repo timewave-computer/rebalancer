@@ -48,7 +48,7 @@ pub enum ServicesManagerAdminMsg {
         addr: String,
         expiration: Expiration,
     },
-    CancelAdminChange,
+    CancelAdminChange {},
     Withdraw {
         denom: String,
     },

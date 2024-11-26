@@ -17,7 +17,7 @@ use crate::{error::ValenceError, helpers::OptionalField};
 pub enum RebalancerExecuteMsg<A = RebalancerData, B = RebalancerUpdateData> {
     Admin(RebalancerAdminMsg),
     SystemRebalance { limit: Option<u64> },
-    ApproveAdminChange,
+    ApproveAdminChange {},
 }
 
 #[cw_serde]
@@ -49,7 +49,7 @@ pub enum RebalancerAdminMsg {
         addr: String,
         expiration: Expiration,
     },
-    CancelAdminChange,
+    CancelAdminChange {},
 }
 
 #[cw_serde]

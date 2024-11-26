@@ -573,7 +573,7 @@ fn test_update_admin_cancel() {
             suite.admin.clone(),
             suite.manager_addr.clone(),
             &valence_package::msgs::core_execute::ServicesManagerExecuteMsg::Admin(
-                valence_package::msgs::core_execute::ServicesManagerAdminMsg::CancelAdminChange,
+                valence_package::msgs::core_execute::ServicesManagerAdminMsg::CancelAdminChange {},
             ),
             &[],
         )

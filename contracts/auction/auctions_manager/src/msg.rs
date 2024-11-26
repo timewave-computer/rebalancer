@@ -83,5 +83,5 @@ pub enum AdminMsgs {
         addr: String,
         expiration: Expiration,
     },
-    CancelAdminChange,
+    CancelAdminChange {},
 }

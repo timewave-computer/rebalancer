@@ -305,7 +305,7 @@ mod admin {
                 };
                 Ok(start_admin_change(deps, &info, &addr, expiration)?.add_event(event.into()))
             }
-            AdminMsgs::CancelAdminChange => {
+            AdminMsgs::CancelAdminChange {} => {
                 let event = ValenceEvent::AuctionManagerCancelAdminChange {};
                 Ok(cancel_admin_change(deps, &info)?.add_event(event.into()))
             }

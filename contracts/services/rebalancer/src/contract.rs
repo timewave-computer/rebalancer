@@ -98,7 +98,7 @@ pub fn execute(
 ) -> Result<Response, ContractError> {
     match msg {
         RebalancerExecuteMsg::Admin(admin_msg) => admin::handle_msg(deps, env, info, admin_msg),
-        RebalancerExecuteMsg::ApproveAdminChange => {
+        RebalancerExecuteMsg::ApproveAdminChange {} => {
             let event = ValenceEvent::RebalancerApproveAdminChange {};
             Ok(approve_admin_change(deps, &env, &info)?.add_event(event.into()))
         }
@@ -632,7 +632,7 @@ mod admin {
                 };
                 Ok(start_admin_change(deps, &info, &addr, expiration)?.add_event(event.into()))
             }
-            RebalancerAdminMsg::CancelAdminChange => {
+            RebalancerAdminMsg::CancelAdminChange {} => {
                 let event = ValenceEvent::RebalancerCancelAdminChange {};
                 Ok(cancel_admin_change(deps, &info)?.add_event(event.into()))
             }

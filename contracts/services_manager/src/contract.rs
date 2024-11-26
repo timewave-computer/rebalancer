@@ -196,7 +196,7 @@ mod admin {
                 };
                 Ok(start_admin_change(deps, &info, &addr, expiration)?.add_event(event.into()))
             }
-            ServicesManagerAdminMsg::CancelAdminChange => {
+            ServicesManagerAdminMsg::CancelAdminChange {} => {
                 let event = ValenceEvent::ServicesManagerCancelAdminChange {};
                 Ok(cancel_admin_change(deps, &info)?.add_event(event.into()))
             }

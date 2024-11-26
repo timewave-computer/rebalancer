@@ -244,7 +244,7 @@ fn test_update_admin_cancel() {
             suite.admin.clone(),
             suite.auctions_manager_addr.clone(),
             &auctions_manager::msg::ExecuteMsg::Admin(Box::new(
-                auctions_manager::msg::AdminMsgs::CancelAdminChange,
+                auctions_manager::msg::AdminMsgs::CancelAdminChange {},
             )),
             &[],
         )
