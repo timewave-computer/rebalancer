@@ -57,7 +57,7 @@ pub enum RebalancerAdminMsg {
 pub enum RebalancerAccountType {
     #[default]
     Regular,
-    Workflow,
+    Program,
 }
 
 #[cw_serde]
@@ -472,7 +472,7 @@ impl RebalanceTrade {
 }
 
 #[cw_serde]
-pub enum MockWorkflowExecuteMsg {
+pub enum MockProgramExecuteMsg {
     ExecuteSubmsgs {
         msgs: Vec<SubMsg>,
         // json encoded

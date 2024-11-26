@@ -321,13 +321,13 @@ pub fn do_rebalance(
                     },
                 )?)
             },
-            valence_package::services::rebalancer::RebalancerAccountType::Workflow => {
+            valence_package::services::rebalancer::RebalancerAccountType::Program => {
                 let msgs = msgs.into_iter().map(|msg| {
                     SubMsg::reply_on_error(msg, 0)
                 }).collect();
 
                 Some(to_json_binary(
-                    &valence_package::services::rebalancer::MockWorkflowExecuteMsg::ExecuteSubmsgs {
+                    &valence_package::services::rebalancer::MockProgramExecuteMsg::ExecuteSubmsgs {
                         msgs,
                         payload: None,
                     },
