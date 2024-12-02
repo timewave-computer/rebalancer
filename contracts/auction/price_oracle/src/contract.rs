@@ -139,12 +139,8 @@ pub fn execute(
             let avg_price = get_avg_price(local_prices);
 
             // Save price
-            PRICES.save(
-                deps.storage,
-                pair.clone(),
-                &avg_price,
-            )?;
-            
+            PRICES.save(deps.storage, pair.clone(), &avg_price)?;
+
             let event = ValenceEvent::OracleUpdatePrice {
                 pair,
                 price: price.price,
@@ -263,7 +259,11 @@ fn can_update_price_from_auction(
     true
 }
 
-fn update_local_price(deps: DepsMut, pair: Pair, price: Price) -> Result<VecDeque<Price>, cosmwasm_std::StdError> {
+fn update_local_price(
+    deps: DepsMut,
+    pair: Pair,
+    price: Price,
+) -> Result<VecDeque<Price>, cosmwasm_std::StdError> {
     // Update the oracle local prices and add last price
     let mut local_prices = match LOCAL_PRICES.load(deps.storage, pair.clone()) {
         Ok(prices) => prices,
