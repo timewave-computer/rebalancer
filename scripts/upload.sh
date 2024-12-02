@@ -18,7 +18,14 @@ elif [[ "$CHAIN" == 'neutron' || "$CHAIN" == 'ntrn' ]]; then
   OWNER_ADDR="neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68"
   AUCTIONS_MANAGER_ADDR="neutron13exc5wdc7y5qpqazc34djnu934lqvfw2dru30j52ahhjep6jzx8ssjxcyz"
 
+elif [[ "$CHAIN" == 'ntrn-testnet' ]]; then
+  BINARY="neutrond"
+  GAS_PRICES="0.075untrn"
+  OWNER_ADDR="neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68"
+  AUCTIONS_MANAGER_ADDR="neutron1669ftav8rv4hjuak89w04k7f0f7m9qq9564s00ld4m8dvhsr5hfsxy3x46"
+  
 else
+
   echo "Unknown chain"
 fi
 
@@ -43,7 +50,6 @@ REBALANCER_FILE_NAME="$ARTIFACTS_PATH/rebalancer.wasm"
 if [[ "$COMMAND" == 'account' ]]; then
   $BINARY tx wasm s $ACCOUNT_FILE_NAME --from $OWNER_ADDR $ACCOUNT_EXECUTE_FLAGS
 elif [[ "$COMMAND" == 'auction' ]]; then
-  # Auction needs to be instantiated by the manager, so need to change the --instantiate-anyof-addresses
   $BINARY tx wasm s $AUCTION_FILE_NAME --from $OWNER_ADDR $EXECUTE_FLAGS
 elif [[ "$COMMAND" == 'auctions-manager' ]]; then
   $BINARY tx wasm s $AUCTIONS_MANAGER_FILE_NAME --from $OWNER_ADDR $EXECUTE_FLAGS

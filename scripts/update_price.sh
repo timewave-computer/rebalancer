@@ -23,6 +23,13 @@ elif [[ "$CHAIN" == 'neutron' || "$CHAIN" == 'ntrn' ]]; then
   FEES="1000untrn"
 
   ORACLE_ADDR="neutron1s8uqyh0mmh8g66s2dectf56c08y6fvusp39undp8kf4v678ededsy6tstf"
+elif [[ "$CHAIN" == 'ntrn-testnet' ]]; then
+  BINARY="neutrond"
+  GAS_PRICES="0.075untrn"
+  OWNER_ADDR="neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68"
+  FEES="1000untrn"
+
+  ORACLE_ADDR="neutron1g4qcmk65nw57hmqlzk6cejnftg20zmctky0l2epdfz3npw3x2cmqprul6f"
 else
   echo "Unknown chain"
 fi
@@ -45,7 +52,7 @@ else
     --arg pair1 "$PAIR1" \
     --arg pair2 "$PAIR2" \
     --arg price "$PRICE" \
-    '{update_price: {
+    '{manual_price_update: {
       pair: [$pair1, $pair2],
       price: $price,
     }}')

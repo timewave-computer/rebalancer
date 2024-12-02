@@ -15,6 +15,12 @@ elif [[ "$CHAIN" == 'neutron' || "$CHAIN" == 'ntrn' ]]; then
   OWNER_ADDR="neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68"
 
   ADDR_AUCTIONS_MANAGER="neutron13exc5wdc7y5qpqazc34djnu934lqvfw2dru30j52ahhjep6jzx8ssjxcyz"
+elif [[ "$CHAIN" == 'ntrn-testnet' ]]; then
+  BINARY="neutrond"
+  GAS_PRICES="0.075untrn"
+  OWNER_ADDR="neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68"
+
+  ADDR_AUCTIONS_MANAGER="neutron1669ftav8rv4hjuak89w04k7f0f7m9qq9564s00ld4m8dvhsr5hfsxy3x46"
 else
   echo "Unknown chain"
 fi
@@ -23,8 +29,8 @@ EXECUTE_FLAGS="--gas-prices $GAS_PRICES --gas auto --gas-adjustment 1.4 -y"
 # EXECUTE_FLAGS="--fees $FEES --gas auto --gas-adjustment 1.4 -y"
 
 ## You can change value manually and uncomment it here
-PAIR='["ibc/B559A80D62249C8AA07A380E2A2BEA6E5CA9A6F079C912C3A9E9B494105E4F81", "factory/neutron1p8d89wvxyjcnawmgw72klknr3lg9gwwl6ypxda/newt"]'
-LABEL="auction USDC/NEWT"
+PAIR='["factory/neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68/rebalancer-test", "untrn"]'
+LABEL="auction TEST/NTRN"
 AUCTION_STRATEGY='{ "start_price_perc": 5000, "end_price_perc": 5000 }'
 CHAIN_HALT='{ "cap": "14400", "block_avg": "3" }'
 PRICE_FRESHNESS='{ "limit": "3", "multipliers": [["2", "2"], ["1", "1.5"]] }'
