@@ -64,8 +64,8 @@ The Rebalancer sends funds to be auctioned daily. If you are a market maker inte
 - auctions-manager - `5673`
 - auction - `5679`
 - services-manager - `5674`
-- rebalancer - `5675`
-- oracle - `5676`
+- rebalancer - `8367`
+- oracle - `8368`
 - account - `5677`
 
 ### Addresses
@@ -77,6 +77,8 @@ The Rebalancer sends funds to be auctioned daily. If you are a market maker inte
 - Account - `neutron1gc3tt3edg3drsc3aa22du9pa9f9s2gx6reu2hvq7s6yrdmy8zqjssfj52p`
 
 ### Auctions addresses
+
+denom - `factory/neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68/rebalancer-test`
 
 - [untrn, test] - `neutron10p7d4ca0a5a3plx0d3dw0qmrnldfxwgq8q48205za6pgyhmqqzasg58fg4`
 - [test, untrn] - `neutron1s859kh0cgte55fmgtksylw5khv8yxvhslpxmpqdy46fv8q7wxj8qtplru4`
