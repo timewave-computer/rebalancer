@@ -349,6 +349,11 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> Result<Binary, ContractErr
 
             Ok(to_json_binary(&price)?)
         }
+        QueryMsg::GetLocalPrice { pair } => {
+            let price: Vec<Price> = LOCAL_PRICES.load(deps.storage, pair)?.into();
+
+            Ok(to_json_binary(&price)?)
+        }
         QueryMsg::GetAllPrices { from, limit } => {
             let from = from.map(Bound::<Pair>::exclusive);
             let prices = PRICES

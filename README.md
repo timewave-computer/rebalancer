@@ -55,9 +55,33 @@ The Rebalancer sends funds to be auctioned daily. If you are a market maker inte
 - [untrn, newt] - `neutron1zvw9l8c82hnvwsntpuy89p86ztfmmudd9usfmnpa2tnqws74zsxq56sczm`
 - [uusdc, newt] - `neutron1vu04szc78ae0nplwpuxjr6j592hn2d60zqtuts7w3ah6kajtxd2q2vfv59`
 
-## Audits
+## Neutron Testnet Contracts
 
-Valence Services have been rigorously tested and audited. Find audits [here](./audits/)
+[![Check Set-Up & Build](https://github.com/timewave-computer/valence-services/actions/workflows/check.yml/badge.svg)](https://github.com/timewave-computer/valence-services/actions/workflows/check.yml)
+
+### Code ids
+
+- auctions-manager - `5673`
+- auction - `5679`
+- services-manager - `5674`
+- rebalancer - `8367`
+- oracle - `8371`
+- account - `5677`
+
+### Addresses
+
+- Services manager - `neutron13ncggwefau3xla04vlugy20meap7g7a9lf2d2sxwgwvgr9mnn3yqkpjzs6`
+- Auctions manager - `neutron1669ftav8rv4hjuak89w04k7f0f7m9qq9564s00ld4m8dvhsr5hfsxy3x46`
+- Rebalancer - `neutron1y9aurkegmqlqwhsnwctee4w4aja7n64yuat800p8yys509pyl0fsvrmydm`
+- Oracle - `neutron1g4qcmk65nw57hmqlzk6cejnftg20zmctky0l2epdfz3npw3x2cmqprul6f`
+- Account - `neutron1gc3tt3edg3drsc3aa22du9pa9f9s2gx6reu2hvq7s6yrdmy8zqjssfj52p`
+
+### Auctions addresses
+
+denom - `factory/neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68/rebalancer-test`
+
+- [untrn, test] - `neutron10p7d4ca0a5a3plx0d3dw0qmrnldfxwgq8q48205za6pgyhmqqzasg58fg4`
+- [test, untrn] - `neutron1s859kh0cgte55fmgtksylw5khv8yxvhslpxmpqdy46fv8q7wxj8qtplru4`
 
 ## Security
 

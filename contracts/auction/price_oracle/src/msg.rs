@@ -48,6 +48,8 @@ pub enum QueryMsg {
     /// Get the minimum amount users can auction
     #[returns(Price)]
     GetPrice { pair: Pair },
+    #[returns(Vec<Price>)]
+    GetLocalPrice { pair: Pair },
     #[returns(Vec<(Pair, Price)>)]
     GetAllPrices {
         from: Option<Pair>,
