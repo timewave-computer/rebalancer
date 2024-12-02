@@ -690,6 +690,16 @@ impl Suite {
             .unwrap()
     }
 
+    pub fn query_oracle_local_price(&self, pair: Pair) -> Vec<GetPriceResponse> {
+        self.app
+            .wrap()
+            .query_wasm_smart(
+                self.oracle_addr.clone(),
+                &price_oracle::msg::QueryMsg::GetLocalPrice { pair },
+            )
+            .unwrap()
+    }
+
     pub fn query_oracle_all_prices(
         &self,
         from: Option<Pair>,

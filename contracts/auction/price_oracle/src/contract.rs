@@ -323,8 +323,8 @@ fn get_price_from_astroport(
                     .checked_add(res.spread_amount)?,
                 0,
             )?;
-            deps.api.debug(format!("res: {:?}", res).as_str());
-            deps.api.debug(format!("Price step: {:?}", price).as_str());
+            // deps.api.debug(format!("res: {:?}", res).as_str());
+            // deps.api.debug(format!("Price step: {:?}", price).as_str());
 
             Ok(price)
         },

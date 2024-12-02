@@ -45,7 +45,7 @@ fn test_add_path_for_pair() {
 fn test_basic_astro_default() {
     let mut suite = SuiteBuilder::default().build_basic(true);
 
-    let old_oracle_price = suite.query_oracle_price(suite.pair.clone());
+    let old_oracle_last_local_price = suite.query_oracle_local_price(suite.pair.clone())[0].clone();
     // This should error because we don't have astro path for the price yet
     // and no auction ran so far
     let err = suite.update_price_err(suite.pair.clone());
@@ -91,16 +91,16 @@ fn test_basic_astro_default() {
 
     // Make sure the pool price is not the same as the old price
     // To confirm the price actually changed later
-    assert_ne!(pool_price, old_oracle_price.price);
+    assert_ne!(pool_price, old_oracle_last_local_price.price);
 
     // Try to update again
     suite.update_price(suite.pair.clone()).unwrap();
 
     // Verify we do get an acceptable price (query price from pool)
-    let oracle_price = suite.query_oracle_price(suite.pair.clone());
+    let oracle_last_local_price = suite.query_oracle_local_price(suite.pair.clone())[0].clone();
     println!("pool_price: {:?}", pool_price);
-    println!("oracle_price: {:?}", oracle_price);
-    assert_eq!(oracle_price.price, pool_price);
+    println!("oracle_price: {:?}", oracle_last_local_price);
+    assert_eq!(oracle_last_local_price.price, pool_price);
 }
 
 // Test for a pair that doesn't have a direct pool, so the astro path is 2 pools
