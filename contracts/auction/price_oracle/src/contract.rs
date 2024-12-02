@@ -49,7 +49,7 @@ pub fn instantiate(
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    deps: DepsMut,
+    mut deps: DepsMut,
     env: Env,
     info: MessageInfo,
     msg: ExecuteMsg,
@@ -84,25 +84,11 @@ pub fn execute(
                 get_price_from_astroport(deps.as_ref(), &env, steps)?
             };
 
-            // Update the oracle local prices and add last price
-            let mut local_prices = match LOCAL_PRICES.load(deps.storage, pair.clone()) {
-                Ok(prices) => prices,
-                Err(_) => VecDeque::new(),
-            };
-
-            // if we have the max amount of prices already, remove the last one first
-            if local_prices.len() >= TWAP_PRICE_MAX_LEN {
-                local_prices.pop_back();
-            }
-
-            // Push the last price into the vector
-            local_prices.push_front(last_price.clone());
-
-            // Save the new list of prices
-            LOCAL_PRICES.save(deps.storage, pair.clone(), &local_prices)?;
+            let local_prices = update_local_price(deps.branch(), pair.clone(), last_price.clone())?;
 
             // Calculate the average price
             let avg_price = get_avg_price(local_prices);
+
             // Save price
             PRICES.save(deps.storage, pair.clone(), &avg_price)?;
 
@@ -143,19 +129,25 @@ pub fn execute(
                 Err(_) => Ok(()),
             }?;
 
+            let price = Price {
+                price,
+                time: env.block.time,
+            };
+            let local_prices = update_local_price(deps.branch(), pair.clone(), price.clone())?;
+
+            // Calculate the average price
+            let avg_price = get_avg_price(local_prices);
+
             // Save price
             PRICES.save(
                 deps.storage,
                 pair.clone(),
-                &Price {
-                    price,
-                    time: env.block.time,
-                },
+                &avg_price,
             )?;
-
+            
             let event = ValenceEvent::OracleUpdatePrice {
                 pair,
-                price,
+                price: price.price,
                 source: "manual".to_string(),
             };
 
@@ -269,6 +261,26 @@ fn can_update_price_from_auction(
     }
 
     true
+}
+
+fn update_local_price(deps: DepsMut, pair: Pair, price: Price) -> Result<VecDeque<Price>, cosmwasm_std::StdError> {
+    // Update the oracle local prices and add last price
+    let mut local_prices = match LOCAL_PRICES.load(deps.storage, pair.clone()) {
+        Ok(prices) => prices,
+        Err(_) => VecDeque::new(),
+    };
+
+    // if we have the max amount of prices already, remove the last one first
+    if local_prices.len() >= TWAP_PRICE_MAX_LEN {
+        local_prices.pop_back();
+    }
+
+    // Push the last price into the vector
+    local_prices.push_front(price.clone());
+
+    // Save the new list of prices
+    LOCAL_PRICES.save(deps.storage, pair.clone(), &local_prices)?;
+    Ok(local_prices)
 }
 
 fn get_avg_price(vec: VecDeque<Price>) -> Price {
