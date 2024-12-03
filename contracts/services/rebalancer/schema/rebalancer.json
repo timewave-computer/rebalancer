@@ -1,6 +1,6 @@
 {
   "contract_name": "rebalancer",
-  "contract_version": "0.1.5",
+  "contract_version": "0.1.7",
   "idl_version": "1.0.0",
   "instantiate": {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -110,12 +110,6 @@
     "description": "Rebalancer execute msgs.",
     "oneOf": [
       {
-        "type": "string",
-        "enum": [
-          "approve_admin_change"
-        ]
-      },
-      {
         "type": "object",
         "required": [
           "admin"
@@ -145,6 +139,19 @@
                 "minimum": 0.0
               }
             },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "required": [
+          "approve_admin_change"
+        ],
+        "properties": {
+          "approve_admin_change": {
+            "type": "object",
             "additionalProperties": false
           }
         },
@@ -443,14 +450,15 @@
         "maxItems": 2,
         "minItems": 2
       },
+      "RebalancerAccountType": {
+        "type": "string",
+        "enum": [
+          "regular",
+          "program"
+        ]
+      },
       "RebalancerAdminMsg": {
         "oneOf": [
-          {
-            "type": "string",
-            "enum": [
-              "cancel_admin_change"
-            ]
-          },
           {
             "type": "object",
             "required": [
@@ -644,6 +652,19 @@
               }
             },
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "cancel_admin_change"
+            ],
+            "properties": {
+              "cancel_admin_change": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
           }
         ]
       },
@@ -656,6 +677,14 @@
           "targets"
         ],
         "properties": {
+          "account_type": {
+            "default": "regular",
+            "allOf": [
+              {
+                "$ref": "#/definitions/RebalancerAccountType"
+              }
+            ]
+          },
           "base_denom": {
             "description": "Base denom we will be calculating everything based on",
             "type": "string"
@@ -1161,6 +1190,13 @@
           },
           "additionalProperties": false
         },
+        "RebalancerAccountType": {
+          "type": "string",
+          "enum": [
+            "regular",
+            "program"
+          ]
+        },
         "RebalancerConfig": {
           "type": "object",
           "required": [
@@ -1173,6 +1209,14 @@
             "targets"
           ],
           "properties": {
+            "account_type": {
+              "default": "regular",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/RebalancerAccountType"
+                }
+              ]
+            },
             "base_denom": {
               "description": "The base denom we will be calculating everything based on",
               "type": "string"
@@ -1272,6 +1316,14 @@
         "targets"
       ],
       "properties": {
+        "account_type": {
+          "default": "regular",
+          "allOf": [
+            {
+              "$ref": "#/definitions/RebalancerAccountType"
+            }
+          ]
+        },
         "base_denom": {
           "description": "The base denom we will be calculating everything based on",
           "type": "string"
@@ -1408,6 +1460,13 @@
             }
           },
           "additionalProperties": false
+        },
+        "RebalancerAccountType": {
+          "type": "string",
+          "enum": [
+            "regular",
+            "program"
+          ]
         },
         "SignedDecimal": {
           "description": "A signed fixed-point decimal value with 18 fractional digits, i.e. SignedDecimal(1_000_000_000_000_000_000) == 1.0\n\nThe greatest possible value that can be represented is 170141183460469231731.687303715884105727 (which is (2^127 - 1) / 10^18) and the smallest is -170141183460469231731.687303715884105728 (which is -2^127 / 10^18).",
@@ -1605,6 +1664,13 @@
             }
           ]
         },
+        "RebalancerAccountType": {
+          "type": "string",
+          "enum": [
+            "regular",
+            "program"
+          ]
+        },
         "RebalancerConfig": {
           "type": "object",
           "required": [
@@ -1617,6 +1683,14 @@
             "targets"
           ],
           "properties": {
+            "account_type": {
+              "default": "regular",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/RebalancerAccountType"
+                }
+              ]
+            },
             "base_denom": {
               "description": "The base denom we will be calculating everything based on",
               "type": "string"
