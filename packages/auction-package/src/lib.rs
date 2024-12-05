@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, str::FromStr};
 
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Decimal, Timestamp};
@@ -47,6 +47,18 @@ pub struct PriceFreshnessStrategy {
     /// Multiplier per day of unfresh data (older than day, multipler)
     /// for when data is older than 2 days, we add: ("2", "1.5")
     pub multipliers: Vec<(Decimal, Decimal)>,
+}
+
+impl Default for PriceFreshnessStrategy {
+    fn default() -> Self {
+        Self {
+            limit: Decimal::from_atomics(3_u128, 0).unwrap(),
+            multipliers: vec![(
+                Decimal::from_atomics(1_u128, 0).unwrap(),
+                Decimal::from_str("1.5").unwrap(),
+            )],
+        }
+    }
 }
 
 #[cw_serde]

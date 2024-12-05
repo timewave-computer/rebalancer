@@ -265,7 +265,7 @@ fn test_update_whitelist() {
     let whitelist = suite.query_rebalancer_whitelists().unwrap();
 
     // lets make sure the whitelist is what we expect for the tests
-    assert!(whitelist.denom_whitelist.contains(&ATOM.to_string()));
+    assert!(whitelist.denom_whitelist.contains(ATOM));
     assert!(whitelist.denom_whitelist.len() == 3);
     assert!(whitelist
         .base_denom_whitelist
@@ -282,8 +282,8 @@ fn test_update_whitelist() {
         .unwrap();
 
     let whitelist = suite.query_rebalancer_whitelists().unwrap();
-    assert!(!whitelist.denom_whitelist.contains(&ATOM.to_string()));
-    assert!(!whitelist.denom_whitelist.contains(&NTRN.to_string()));
+    assert!(!whitelist.denom_whitelist.contains(ATOM));
+    assert!(!whitelist.denom_whitelist.contains(NTRN));
     assert!(whitelist.denom_whitelist.len() == 2);
 
     // remove atom, add random

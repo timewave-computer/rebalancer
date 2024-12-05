@@ -1,10 +1,14 @@
-use auction_package::Pair;
+use std::collections::VecDeque;
+
+use auction_package::{Pair, Price};
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::Addr;
 use cw_storage_plus::{Item, Map};
 
 pub const CONFIG: Item<Config> = Item::new("config");
 pub const ASTRO_PRICE_PATHS: Map<Pair, Vec<PriceStep>> = Map::new("astro_price_paths");
+/// Local last 10 prices to be calculated for the average
+pub const LOCAL_PRICES: Map<Pair, VecDeque<Price>> = Map::new("local_prices");
 
 #[cw_serde]
 pub struct Config {

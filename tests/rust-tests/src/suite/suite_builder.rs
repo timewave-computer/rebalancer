@@ -138,6 +138,7 @@ impl SuiteBuilder {
             },
             max_limit_bps: None,
             target_override_strategy: TargetOverrideStrategy::Proportional,
+            account_type: Default::default(),
         }
     }
 

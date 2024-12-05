@@ -121,6 +121,7 @@ fn test_register() {
             last_rebalance: Timestamp::from_seconds(0),
             has_min_balance: false,
             target_override_strategy: TargetOverrideStrategy::Proportional,
+            account_type: Default::default(),
         },
     );
 
@@ -167,6 +168,7 @@ fn test_register() {
             last_rebalance: Timestamp::from_seconds(0),
             has_min_balance: false,
             target_override_strategy: TargetOverrideStrategy::Proportional,
+            account_type: Default::default(),
         },
     );
 
@@ -425,6 +427,7 @@ fn test_update() {
             last_rebalance: Timestamp::from_seconds(0),
             has_min_balance: true,
             target_override_strategy: TargetOverrideStrategy::Priority,
+            account_type: Default::default(),
         },
     )
 }

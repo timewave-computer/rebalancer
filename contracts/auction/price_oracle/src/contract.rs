@@ -16,10 +16,12 @@ use valence_package::event_indexing::{ValenceEvent, ValenceGenericEvent};
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
-use crate::state::{Config, PriceStep, ASTRO_PRICE_PATHS, CONFIG};
+use crate::state::{Config, PriceStep, ASTRO_PRICE_PATHS, CONFIG, LOCAL_PRICES};
 
 const CONTRACT_NAME: &str = "crates.io:oracle";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+const TWAP_PRICE_MAX_LEN: usize = 10;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
@@ -47,7 +49,7 @@ pub fn instantiate(
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    deps: DepsMut,
+    mut deps: DepsMut,
     env: Env,
     info: MessageInfo,
     msg: ExecuteMsg,
@@ -58,6 +60,7 @@ pub fn execute(
 
             let config = CONFIG.load(deps.storage)?;
 
+            // We get the prices from the auction
             let auction_addr = PAIRS
                 .query(
                     &deps.querier,
@@ -65,13 +68,14 @@ pub fn execute(
                     pair.clone(),
                 )?
                 .ok_or(ContractError::PairAuctionNotFound)?;
-            let twap_prices = TWAP_PRICES.query(&deps.querier, auction_addr)?;
+            let auction_twap_prices = TWAP_PRICES.query(&deps.querier, auction_addr)?;
 
             let source;
 
-            let price = if can_update_price_from_auction(&config, &env, &twap_prices) {
+            // We get last price either form auction or astroport
+            let last_price = if can_update_price_from_auction(&config, &env, &auction_twap_prices) {
                 source = "auction";
-                get_avg_price(twap_prices)
+                auction_twap_prices[0].clone()
             } else {
                 let steps = ASTRO_PRICE_PATHS
                     .load(deps.storage, pair.clone())
@@ -80,12 +84,17 @@ pub fn execute(
                 get_price_from_astroport(deps.as_ref(), &env, steps)?
             };
 
+            let local_prices = update_local_price(deps.branch(), pair.clone(), last_price.clone())?;
+
+            // Calculate the average price
+            let avg_price = get_avg_price(local_prices);
+
             // Save price
-            PRICES.save(deps.storage, pair.clone(), &price)?;
+            PRICES.save(deps.storage, pair.clone(), &avg_price)?;
 
             let event = ValenceEvent::OracleUpdatePrice {
                 pair: pair.clone(),
-                price: price.price,
+                price: avg_price.price,
                 source: source.to_string(),
             };
 
@@ -120,19 +129,21 @@ pub fn execute(
                 Err(_) => Ok(()),
             }?;
 
+            let price = Price {
+                price,
+                time: env.block.time,
+            };
+            let local_prices = update_local_price(deps.branch(), pair.clone(), price.clone())?;
+
+            // Calculate the average price
+            let avg_price = get_avg_price(local_prices);
+
             // Save price
-            PRICES.save(
-                deps.storage,
-                pair.clone(),
-                &Price {
-                    price,
-                    time: env.block.time,
-                },
-            )?;
+            PRICES.save(deps.storage, pair.clone(), &avg_price)?;
 
             let event = ValenceEvent::OracleUpdatePrice {
                 pair,
-                price,
+                price: price.price,
                 source: "manual".to_string(),
             };
 
@@ -248,6 +259,30 @@ fn can_update_price_from_auction(
     true
 }
 
+fn update_local_price(
+    deps: DepsMut,
+    pair: Pair,
+    price: Price,
+) -> Result<VecDeque<Price>, cosmwasm_std::StdError> {
+    // Update the oracle local prices and add last price
+    let mut local_prices = match LOCAL_PRICES.load(deps.storage, pair.clone()) {
+        Ok(prices) => prices,
+        Err(_) => VecDeque::new(),
+    };
+
+    // if we have the max amount of prices already, remove the last one first
+    if local_prices.len() >= TWAP_PRICE_MAX_LEN {
+        local_prices.pop_back();
+    }
+
+    // Push the last price into the vector
+    local_prices.push_front(price.clone());
+
+    // Save the new list of prices
+    LOCAL_PRICES.save(deps.storage, pair.clone(), &local_prices)?;
+    Ok(local_prices)
+}
+
 fn get_avg_price(vec: VecDeque<Price>) -> Price {
     let (total_count, prices_sum) = vec.iter().fold(
         (Decimal::zero(), Decimal::zero()),
@@ -288,8 +323,8 @@ fn get_price_from_astroport(
                     .checked_add(res.spread_amount)?,
                 0,
             )?;
-            deps.api.debug(format!("res: {:?}", res).as_str());
-            deps.api.debug(format!("Price step: {:?}", price).as_str());
+            // deps.api.debug(format!("res: {:?}", res).as_str());
+            // deps.api.debug(format!("Price step: {:?}", price).as_str());
 
             Ok(price)
         },
@@ -311,6 +346,11 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> Result<Binary, ContractErr
     match msg {
         QueryMsg::GetPrice { pair } => {
             let price = PRICES.load(deps.storage, pair)?;
+
+            Ok(to_json_binary(&price)?)
+        }
+        QueryMsg::GetLocalPrice { pair } => {
+            let price: Vec<Price> = LOCAL_PRICES.load(deps.storage, pair)?.into();
 
             Ok(to_json_binary(&price)?)
         }

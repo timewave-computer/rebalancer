@@ -1,0 +1,13 @@
+[package]
+name        = "cw-pid"
+version     = { workspace = true }
+edition     = { workspace = true }
+authors     = ["Art3miX <r3mix.il@gmail.com>"]
+description = "Package for valence set of contracts"
+license     = { workspace = true }
+
+[dependencies]
+cosmwasm-std       = { workspace = true }
+serde              = { workspace = true }
+serde-wasm-bindgen = "0.4"
+wasm-bindgen       = "0.2"

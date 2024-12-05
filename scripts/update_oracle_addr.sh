@@ -20,18 +20,23 @@ elif [[ "$CHAIN" == 'neutron' || "$CHAIN" == 'ntrn' ]]; then
   FEES="1000untrn"
 
   ADDR_AUCTIONS_MANAGER="neutron13exc5wdc7y5qpqazc34djnu934lqvfw2dru30j52ahhjep6jzx8ssjxcyz"
+elif [[ "$CHAIN" == 'ntrn-testnet' ]]; then
+  BINARY="neutrond"
+  GAS_PRICES="0.075untrn"
+  OWNER_ADDR="neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68"
+
+  ADDR_AUCTIONS_MANAGER="neutron1669ftav8rv4hjuak89w04k7f0f7m9qq9564s00ld4m8dvhsr5hfsxy3x46"
 else
   echo "Unknown chain"
 fi
 
 EXECUTE_FLAGS="--gas-prices $GAS_PRICES --gas auto --gas-adjustment 1.4 -y"
-# EXECUTE_FLAGS="--fees $FEES --gas auto --gas-adjustment 1.4 -y"
 
 execute_msg=$(jq -n \
-  --arg oracle_Addr "$ORACLE_ADDR" \
+  --arg oracle_addr "$ORACLE_ADDR" \
   '{admin: {
       update_oracle: {
-        oracle_addr: $oracle_Addr,
+        oracle_addr: $oracle_addr,
       }
     }}')
 

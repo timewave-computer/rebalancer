@@ -1,8 +1,8 @@
 use auction_package::Pair;
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{
-    coins, Addr, Api, BankMsg, CosmosMsg, Decimal, Env, MessageInfo, SignedDecimal, Timestamp,
-    Uint128,
+    coins, Addr, Api, BankMsg, CosmosMsg, Decimal, Env, MessageInfo, SignedDecimal, SubMsg,
+    Timestamp, Uint128,
 };
 use cw_utils::{must_pay, Expiration};
 use std::borrow::Borrow;
@@ -54,6 +54,14 @@ pub enum RebalancerAdminMsg {
 }
 
 #[cw_serde]
+#[derive(Default)]
+pub enum RebalancerAccountType {
+    #[default]
+    Regular,
+    Program,
+}
+
+#[cw_serde]
 pub struct RebalancerData {
     /// The trustee address that can pause/resume the service
     pub trustee: Option<String>,
@@ -67,6 +75,8 @@ pub struct RebalancerData {
     pub max_limit_bps: Option<u64>, // BPS
     /// The strategy to use when overriding targets
     pub target_override_strategy: TargetOverrideStrategy,
+    #[serde(default)]
+    pub account_type: RebalancerAccountType,
 }
 
 #[cw_serde]
@@ -104,6 +114,7 @@ impl RebalancerData {
             last_rebalance: Timestamp::from_seconds(0),
             has_min_balance,
             target_override_strategy: self.target_override_strategy,
+            account_type: self.account_type,
         })
     }
 }
@@ -124,6 +135,8 @@ pub struct RebalancerConfig {
     pub last_rebalance: Timestamp,
     pub has_min_balance: bool,
     pub target_override_strategy: TargetOverrideStrategy,
+    #[serde(default)]
+    pub account_type: RebalancerAccountType,
 }
 
 #[cw_serde]
@@ -459,9 +472,21 @@ impl RebalanceTrade {
     }
 }
 
+#[cw_serde]
+pub enum MockProgramExecuteMsg {
+    ExecuteSubmsgs {
+        msgs: Vec<SubMsg>,
+        // json encoded
+        payload: Option<String>,
+    },
+}
+
 #[cfg(test)]
 mod test {
-    use crate::error::ValenceError;
+    use cosmwasm_schema::cw_serde;
+    use cosmwasm_std::{from_json, to_json_binary, Addr};
+
+    use crate::{error::ValenceError, services::rebalancer::RebalancerAccountType};
 
     use super::PID;
 
@@ -494,5 +519,28 @@ mod test {
         .unwrap_err();
 
         assert_eq!(err, ValenceError::PIDErrorOver)
+    }
+
+    #[test]
+    fn test_parse() {
+        #[cw_serde]
+        struct Data1 {
+            /// the address that can pause and resume the service
+            pub trustee: Option<Addr>,
+        }
+
+        #[cw_serde]
+        struct Data2 {
+            /// the address that can pause and resume the service
+            pub trustee: Option<Addr>,
+            #[serde(default)]
+            pub account_type: RebalancerAccountType,
+        }
+
+        let one = Data1 { trustee: None };
+
+        let parse = to_json_binary(&one).unwrap();
+        let two = from_json::<Data2>(&parse).unwrap();
+        println!("{:?}", two);
     }
 }

@@ -21,6 +21,13 @@ elif [[ "$CHAIN" == 'neutron' || "$CHAIN" == 'ntrn' ]]; then
   FEES="1000untrn"
 
   ADDR_SERVICES_MANAGER="neutron1gantvpnat0la8kkkzrnj48d5d8wxdjllh5r2w4r2hcrpwy00s69quypupa"
+elif [[ "$CHAIN" == 'ntrn-testnet' ]]; then
+  BINARY="neutrond"
+  GAS_PRICES="0.075untrn"
+  OWNER_ADDR="neutron1phx0sz708k3t6xdnyc98hgkyhra4tp44et5s68"
+  FEES="1000untrn"
+
+  ADDR_SERVICES_MANAGER="neutron13ncggwefau3xla04vlugy20meap7g7a9lf2d2sxwgwvgr9mnn3yqkpjzs6"
 else
   echo "Unknown chain"
 fi

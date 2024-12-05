@@ -311,23 +311,43 @@ pub fn do_rebalance(
     // is independent of other trade msg
     // This means 1 trade might fail while another pass, which means rebalance strategy was not executed 100% this cycle
     // but this will be corrected on the next rebalance cycle.
-    let msg = if !msgs.is_empty() {
-        Some(SubMsg::reply_on_error(
-        WasmMsg::Execute {
-            contract_addr: account.to_string(),
-            msg: to_json_binary(
-                &valence_package::msgs::core_execute::AccountBaseExecuteMsg::SendFundsByService {
-                    msgs,
-                    atomic: false,
-                },
-            )?,
-            funds: vec![],
-        },
-        REPLY_DEFAULT_REBALANCE,
-    ))
+    let reb_msg = if !msgs.is_empty() {
+        match config.account_type {
+            valence_package::services::rebalancer::RebalancerAccountType::Regular => {
+                Some(to_json_binary(
+                    &valence_package::msgs::core_execute::AccountBaseExecuteMsg::SendFundsByService {
+                        msgs,
+                        atomic: false,
+                    },
+                )?)
+            },
+            valence_package::services::rebalancer::RebalancerAccountType::Program => {
+                let msgs = msgs.into_iter().map(|msg| {
+                    SubMsg::reply_on_error(msg, 0)
+                }).collect();
+
+                Some(to_json_binary(
+                    &valence_package::services::rebalancer::MockProgramExecuteMsg::ExecuteSubmsgs {
+                        msgs,
+                        payload: None,
+                    },
+                )?)
+            },
+        }
     } else {
         None
     };
+
+    let msg = reb_msg.map(|reb_msg| {
+        SubMsg::reply_on_error(
+            WasmMsg::Execute {
+                contract_addr: account.to_string(),
+                msg: reb_msg,
+                funds: vec![],
+            },
+            REPLY_DEFAULT_REBALANCE,
+        )
+    });
 
     // We edit config to save data for the next rebalance calculation
     config.last_rebalance = env.block.time;

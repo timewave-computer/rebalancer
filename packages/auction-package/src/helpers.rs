@@ -29,6 +29,15 @@ pub struct ChainHaltConfig {
     pub block_avg: Decimal,
 }
 
+impl Default for ChainHaltConfig {
+    fn default() -> Self {
+        Self {
+            cap: 86000_u128,
+            block_avg: Decimal::one() + Decimal::one(),
+        }
+    }
+}
+
 #[cw_serde]
 pub struct AuctionConfig {
     pub is_paused: bool,
