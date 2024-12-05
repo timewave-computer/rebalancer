@@ -31,6 +31,14 @@ The Rebalancer sends funds to be auctioned daily. If you are a market maker inte
 
 [![Check Set-Up & Build](https://github.com/timewave-computer/valence-services/actions/workflows/check.yml/badge.svg)](https://github.com/timewave-computer/valence-services/actions/workflows/check.yml)
 
+### Code ids
+- services manager = `1615`
+- rebalancer = `2641`
+- auctions manager = `1614`
+- auction = `1617`
+- oracle = `2642`
+- account = `1618`
+
 ### Addresses
 
 - Services manager - `neutron1gantvpnat0la8kkkzrnj48d5d8wxdjllh5r2w4r2hcrpwy00s69quypupa`
@@ -54,6 +62,8 @@ The Rebalancer sends funds to be auctioned daily. If you are a market maker inte
 - [uatom, newt] - `neutron1fyk77ttx2j3wxjj26g3d8csjzp005cxdacstfxcrdexpn8nsz79qhjhpsd`
 - [untrn, newt] - `neutron1zvw9l8c82hnvwsntpuy89p86ztfmmudd9usfmnpa2tnqws74zsxq56sczm`
 - [uusdc, newt] - `neutron1vu04szc78ae0nplwpuxjr6j592hn2d60zqtuts7w3ah6kajtxd2q2vfv59`
+
+
 
 ## Neutron Testnet Contracts
 
