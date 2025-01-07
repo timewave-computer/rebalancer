@@ -1,8 +1,10 @@
-# Rebalancer User Guide
+# DAODAO Rebalancer User Guide
 
 ## Introduction
 
 The Rebalancer is a service designed for DAOs and individual users to manage their portfolio or treasury by setting their desired target. During each daily rebalance cycle, the service determines which assets need to be bought or sold to reach their target. Assets marked for sale are then auctioned off, allowing anyone to place bids on them. To begin using the Rebalancer service, users must first create a Valence account and register to the Rebalancer service.
+
+[video tutorial](https://www.loom.com/share/67977d482a9345848a97f345eb38029d)
 
 ## How to use it
 
